@@ -176,6 +176,7 @@ class norm_gen(rv_continuous):
     def fit(self, data, **kwds):
         floc = kwds.get('floc', None)
         fscale = kwds.get('fscale', None)
+        weights = kwds.get('weights', None)
 
         if floc is not None and fscale is not None:
             # This check is for consistency with `rv_continuous.fit`.
@@ -183,6 +184,10 @@ class norm_gen(rv_continuous):
             # parameters that were given.
             raise ValueError("All parameters fixed. There is nothing to "
                              "optimize.")
+
+        if weights is not None:
+            weights = np.asarray(weights)
+            data *= weights / weights.mean()
 
         data = np.asarray(data)
 
